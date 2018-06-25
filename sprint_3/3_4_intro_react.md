@@ -237,9 +237,9 @@ Muy parecido al JSX que hemos escrito, ¿verdad?
 
 **EJERCICIO 1**:
 
-Vamos a crear un nuevo proyecto de React llamado ShoppingList. Vamos a modificar el método `render` del componente `App` para que tenga un diseño similar al de la imagen. De esta forma, aprenderemos a cómo trabajar con cosas que ya conocemos (HTML y CSS) en una aplicación de React.
+Vamos a crear un nuevo proyecto de React llamado MediaCard. Vamos a modificar el método `render` del componente `App` para que tenga un diseño similar al de la imagen. Podéis usar una imagen a vuestra elección para la que aparece en el diseño, y Font-Awesome para el icono del corazón. De esta forma, aprenderemos a cómo trabajar con cosas que ya conocemos (HTML y CSS) en una aplicación de React.
 
-!["Hola, mundo" en React](assets/3-4/shopping-list.png)
+![Media Card](assets/3-4/media-card.png)
 
 * * *
 
