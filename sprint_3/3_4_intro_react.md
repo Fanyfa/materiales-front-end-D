@@ -8,9 +8,6 @@
 - ["Hola, mundo" con `create-react-app`](#hola-mundo-con-create-react-app)
 - [JSX y el método `render`: la magia de no tener que manipular el DOM](#jsx-y-el-método-render)
 - [Interfaz declarativa VS imperativa](#interfaz-declarativa-vs-imperativa)
-- [Creando nuestro primer componente](#creando-nuestro-primer-componente)
-- [Creando varios componentes](#creando-varios-componentes)
-- [Las `props` para pasar datos entre componentes](#las-props-para-pasar-datos-entre-componentes)
 
 ## Introducción
 
@@ -127,12 +124,29 @@ npm start
 
 `create-react-app` nos ha instalado un _live-server_, así que sin cerrar el navegador ni el terminal, vamos a abrir el archivo `my-react-project/src/App.js` y probar a cambiar la frase "Welcome to React" por "¡Hola, mundo!". Guardamos y cambiamos al navegador.
 
-!["Hola, mundo" en React](assets/4-3/react-hello-world.png)
+!["Hola, mundo" en React](assets/3-4/react-hello-world.png)
 
+## Estructura de un proyecto React creado con `create-react-app`
 
-## JSX y el método `render`
+Cuando creamos un proyecto nuevo de React se nos crea una estructura la estructura de ficheros y carpetas que hemos visto antes. Vamos a ver cuáles son los ficheros principales que necesitamos conocer.
 
-Quizá al modificar el archivo `App.js` os haya sorprendido algo. _"¿Eso no es HTML? ¡Pero si esto es un archivo JavaScript!"_:
+### `public/index.html`
+
+Es el único fichero HTML que usaremos en nuestra aplicación. Podemos modificar algunas cosas pequeñas para personalizar la aplicación: añadir etiquetas `meta`, cargar fuentes, definir el título, etc. En el `body` se carga un `div` con identificador `root` que será donde se carga la aplicación de React.
+
+### `src/index.js`
+
+Este será el fichero JS de entrada a nuestra aplicación React. Será el único en el que carguemos `ReactDOM` y se encarga de acceder a un nodo del DOM (el `div` que antes identificamos como `root`) y pintar el componente principal de la aplicación, en este caso, llamado `App`.
+
+```js
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+Para pintar el componente `App` usamos una sintaxis un poco rara: _¡es como si `App` fuese una etiqueta del HTML!_ Vamos a verlo en más profundidad en el siguiente fichero.
+
+### `src/App.js`
+
+Este fichero corresponde a nuestro primer _componente_ de React, pero ya veremos qué es un componente más adelante. De momento, vamos a pensar que quizá al modificar el archivo `App.js` os haya sorprendido algo. _"¿Eso no es HTML? ¡Pero si esto es un archivo JavaScript!"_:
 
 ```js
 import React, { Component } from 'react';
@@ -158,20 +172,29 @@ class App extends Component {
 export default App;
 ```
 
-Esas etiquetas `div`, `header`, `img`, `h1` y `p` son una extensión de la sintaxis de JavaScript que se llama **JSX**. JSX nos facilita escribir código que React transformará luego en elementos reales del DOM. Como JSX no deja de ser **código JavaScript**, lo podemos tratar como tal. Por ejemplo, podemos guardar elementos en una variable:
+Esas etiquetas `div`, `header`, `img`, `h1` y `p` son una extensión de la sintaxis de JavaScript que se llama **JSX**. JSX nos facilita escribir código que React transformará luego en elementos reales del DOM. De esta forma podemos definir fácilmente el contenido de un elemento porque usa la sitaxis de HTML que ya conocemos.
+
+Como JSX no deja de ser **código JavaScript**, lo podemos tratar como tal. Por ejemplo, podemos guardar elementos en una variable. También podemos usar expresiones JavaScript dentro de esa sintaxis con `{` y `}`, como si fuera la interpolación de cadenas de ES6 (pero sin `$`):
 
 ```js
 const titleElement = <h1>¡Hola, mundo!</h1>;
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+      <header className="App-header">
+        {titleElement}
+      </header>
+      </div>
+    );
+  }
+}
+
 ```
 
-Podemos usar expresiones JavaScript dentro de esa sintaxis con `{` y `}`, como si fuera la interpolación de cadenas de ES6 (pero sin `$`):
 
-```js
-const titleText = '¡Hola, mundo!';
-const titleElement = <h1>{ titleText }</h1>;
-```
-
-También podemos añadir atributos a los elementos que creemos:
+Como es HTML, podemos añadir atributos a los elementos que definamos con JSX:
 
 ```js
 const titleElement = <h1 className="App-title">¡Hola, mundo!</h1>;
@@ -179,13 +202,19 @@ const titleElement = <h1 className="App-title">¡Hola, mundo!</h1>;
 
 > **NOTA**: `class` es una palabra reservada en JavaScript, así que tendremos que usar `className` como nombre de atributo cuando queramos asignar una clase CSS
 
+Por último, hay que destacar otra cosa de este fichero: estamos importando imágenes y CSS. _¿Y esooo?_ Pues porque en React tenemos la posibilidad y es una buena práctica trabajar de esta forma: desde un componente (fichero JS) importamos las imágenes y CSS que necesitemos para montar la interfaz del componente. Y confiamos en que la configuración del automatizador que tenemos por debajo (en este caso webpack), se encarga de importar los CSS desde el HTML (para que el navegador los entienda) y modificar las imágenes por su ruta para que puedan ser visualizadas. De momento nos quedamos con que _en React se hace así_.
+
+
+### JSX es JavaScript y el método `render`
+
+Para terminar, recordemos que el JSX que escribimos al final se convierte en código JavaScript. Pero entonces, ¿por qué usamos JSX y no directamente escribimos JavaScript? Porque la sintaxis de JSX es muy cercana a HTML, mucho más legible y simplifica el desarrollo de nuestros componentes. _¿Y si no usáramos JSX?_ Vamos a ver un ejemplo:
+
 ```js
 const titleClassNames = 'App-title';
 const titleElement = <h1 className={ titleClassNames }>¡Hola, mundo!</h1>;
 ```
 
-
-Este último ejemplo de JSX se transformará en este JavaScript:
+Este ejemplo de JSX se transformará en este JavaScript:
 
 ```js
 const titleClassNames = 'App-title';
@@ -208,9 +237,17 @@ Muy parecido al JSX que hemos escrito, ¿verdad?
 
 **EJERCICIO 1**:
 
-Vamos a crear un proyecto nuevo con `create-react-app` y a familiarizarnos con JSX. Este ejercicio también nos ayudará a asignar nombres a las variables, un tema que será importante cuando creemos nuestros componentes más adelante.
+Vamos a crear un nuevo proyecto de React llamado ShoppingList. Vamos a modificar el método `render` del componente `App` para que tenga un diseño similar al de la imagen. De esta forma, aprenderemos a cómo trabajar con cosas que ya conocemos (HTML y CSS) en una aplicación de React.
 
-Una vez generado el proyecto, solo modificaremos el método `render()` dentro del archivo `App.js`. El objetivo será que el `return` de `render()` devuelva una sola variable. Para lo que extraeremos a variables cada una de las "etiquetas" del contenido del `return` original. Por ejemplo, una variable para la cabecera, y otra para el párrafo. Haremos que los nombres de nuestras variables sean descriptivos y, solo cuando sea posible, cortos.
+!["Hola, mundo" en React](assets/3-4/shopping-list.png)
+
+* * *
+
+**EJERCICIO 2**:
+
+Partiendo del ejercicio anterior, en este ejercicio aprenderemos mejor cómo funciona JSX. Para ello vamos a asignar nombres a las variables, un tema que será importante cuando creemos nuestros componentes más adelante.
+
+Partiendo del proyecto anterior, solo modificaremos el método `render()` dentro del archivo `App.js`. El objetivo será que el `return` de `render()` devuelva una sola variable. Para lo que extraeremos a variables cada una de las "etiquetas" del contenido del `return` original. Por ejemplo, una variable para la cabecera, y otra para el párrafo. Haremos que los nombres de nuestras variables sean descriptivos y, solo cuando sea posible, cortos.
 
 ```js
 render() {
@@ -230,7 +267,6 @@ render() {
   return appRoot;
 }
 ```
->NOTA: a partir de ahora te recomendamos reusar este proyecto React que ya tienes creado para ir probando el resto de los ejemplos.
 
 * * *
 
