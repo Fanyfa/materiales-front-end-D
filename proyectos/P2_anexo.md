@@ -78,3 +78,6 @@ Si hay algún error, la respuesta tiene esta pinta:
 }
 ```
 
+## Ejemplo de uso
+
+Proporcionamos un [ejemplo de uso del servicio en este codepen](https://codepen.io/adalab/pen/yERXZE?editors=1010).
